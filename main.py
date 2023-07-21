@@ -108,9 +108,9 @@ class PlaceClient:
                     "input": {
                         "actionName": "r/replace:set_pixel",
                         "PixelMessageData": {
-                            "coordinate": {"x": x, "y": y},
-                            "colorIndex": color_index_in,
-                            "canvasIndex": canvas_index,
+                            "coordinate": {"x": 498, "y": 990},
+                            "colorIndex": 27,
+                            "canvasIndex": 1,
                         },
                     }
                 },
@@ -118,9 +118,9 @@ class PlaceClient:
             }
         )
         headers = {
-            "origin": "https://hot-potato.reddit.com",
-            "referer": "https://hot-potato.reddit.com/",
-            "apollographql-client-name": "mona-lisa",
+            "origin": "https://garlic-bread.reddit.com",
+            "referer": "https://garlic-bread.reddit.com/",
+            "apollographql-client-name": "garlic-bread",
             "Authorization": "Bearer " + access_token_in,
             "Content-Type": "application/json",
         }
@@ -142,9 +142,10 @@ class PlaceClient:
         # If we don't get data, it means we've been rate limited.
         # If we do, a pixel has been successfully placed.
         if response.json()["data"] is None:
-            logger.debug(response.json().get("errors"))
+            errors = response.json().get("errors")
+            logger.debug(errors)
             waitTime = math.floor(
-                response.json()["errors"][0]["extensions"]["nextAvailablePixelTs"]
+                errors[0]["extensions"]["nextAvailablePixelTs"]
             )
             logger.error(
                 "Thread #{} - {}: Failed placing pixel: rate limited",
@@ -371,7 +372,8 @@ class PlaceClient:
                 imgOutdated = True
 
             if imgOutdated:
-                boardimg = self.get_board(self.access_tokens[index])
+                #boardimg = self.get_board(self.access_tokens[index])
+                boardimg = Image.new("RGB", (1000, 1000))
                 pix2 = boardimg.convert("RGB").load()
                 imgOutdated = False
 
@@ -508,7 +510,9 @@ class PlaceClient:
                             client.proxies = proxy.get_random_proxy(self, name)
                             client.headers.update(
                                 {
-                                    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.84 Safari/537.36"
+                                    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36",
+                                    "Origin": "https://www.reddit.com",
+                                    "Referer": "https://www.reddit.com/login/?",
                                 }
                             )
 
@@ -523,7 +527,7 @@ class PlaceClient:
                             data = {
                                 "username": username,
                                 "password": password,
-                                "dest": "https://new.reddit.com/",
+                                "dest": "https://www.reddit.com/",
                                 "csrf_token": csrf_token,
                             }
 
