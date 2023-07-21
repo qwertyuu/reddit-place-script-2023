@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "reddit-place-script-2022"
+name = "reddit-place-script-2023"
 version = "1.0.0"
 description = "A python bot for automatically placing images in r/place"
 authors = ["Your Name <you@example.com>"]
